@@ -11,14 +11,9 @@ describe Oystercard do
   end
 
   it "Checks that max balance is enforced" do
-    expect { subject.top_up(100) }.to raise_error "maximum balance 90 pounds"
+    expect { subject.top_up(100) }.to raise_error "Maximum balance of #{Oystercard::MAX_BALANCE} exceeded"
   end
 
-  it "Checks that a fare amount can be deducted from the balance on the card" do
-    subject.top_up(10)
-    subject.deduct(5)
-    expect(subject.balance).to eq(5)
-  end
 
   #   In order to get through the barriers.
   # As a customer
@@ -44,6 +39,11 @@ describe Oystercard do
 
   it "raises error if card has less than minimum balance" do
     expect { subject.touch_in }.to raise_error "Insufficient balance"
+  end
+
+
+  it "deducts minimum_charge on touch-out" do
+    expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MIN_CHARGE)
   end
 
   # it 'Checks that the card can be used to Touch_in' do
