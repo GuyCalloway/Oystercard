@@ -1,32 +1,44 @@
-require_relative '../lib/oystercard.rb'
+require_relative "../lib/oystercard.rb"
 
 describe Oystercard do
-  it 'Check that a customer can put money on their card i.e. the topup method can be called' do
+  it "Check that a customer can put money on their card i.e. the topup method can be called" do
     expect(subject).to respond_to(:top_up)
   end
 
-  it 'Checks that balance is increased by the topup amount' do
+  it "Checks that balance is increased by the topup amount" do
     subject.top_up(10)
     expect(subject.balance).to eq(10)
   end
 
-  it 'Checks that max balance is enforced' do
-    expect{subject.top_up(100)}.to raise_error 'maximum balance 90 pounds'
+  it "Checks that max balance is enforced" do
+    expect { subject.top_up(100) }.to raise_error "maximum balance 90 pounds"
   end
 
-  it 'Checks that a fare amount can be deducted from the balance on the card' do
+  it "Checks that a fare amount can be deducted from the balance on the card" do
     subject.top_up(10)
     subject.deduct(5)
     expect(subject.balance).to eq(5)
   end
 
-#   In order to get through the barriers.
-# As a customer
-# I need to touch in and out.
+  #   In order to get through the barriers.
+  # As a customer
+  # I need to touch in and out.
 
-  it 'checks that cards state is not in_journey' do
+  it "checks that cards state is not in_journey" do
     expect(subject).to_not be_in_journey
   end
+
+  it "checks touch in changes in journey to true" do
+    subject.touch_in
+    expect(subject).to be_in_journey
+  end
+
+  it "checks touch out changes in journey to false" do
+    subject.touch_in
+    subject.touch_out
+    expect(subject).to_not be_in_journey
+  end
+
   # it 'Checks that the card can be used to Touch_in' do
   #   subject.top_up(10)
   #   subject.touch_in
