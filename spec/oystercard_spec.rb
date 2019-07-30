@@ -1,6 +1,13 @@
 require_relative "../lib/oystercard.rb"
 
+
 describe Oystercard do
+
+  let(:station) { double :station }
+  let(:station2) { double :station2 }
+
+  let(:journey) { { entry_station: station, exit_station: station2 } }
+
   it "Check that a customer can put money on their card i.e. the topup method can be called" do
     expect(subject).to respond_to(:top_up)
   end
@@ -28,7 +35,7 @@ describe Oystercard do
   it "checks touch out changes in journey to false" do
     subject.top_up(5)
     subject.touch_in(station)
-    subject.touch_out
+    subject.touch_out(station2)
     expect(subject).to_not be_in_journey
   end
 
@@ -37,10 +44,8 @@ describe Oystercard do
   end
 
   it "deducts minimum_charge on touch-out" do
-    expect { subject.touch_out }.to change { subject.balance }.by(-Oystercard::MIN_CHARGE)
+    expect { subject.touch_out(station) }.to change { subject.balance }.by(-Oystercard::MIN_CHARGE)
   end
-
-  let(:station) { double :station }
 
   it "stores the entry station" do
     subject.top_up(Oystercard::MIN_CHARGE)
@@ -48,6 +53,19 @@ describe Oystercard do
     expect(subject.entry_station).to eq (station)
   end
 
+  it "stores entry and exit location in hash" do
+    subject.top_up(Oystercard::MIN_CHARGE)
+    subject.touch_in(station)
+    subject.touch_out(station2)
+    expect(subject.journey).to eq({:entry_station => station, :exit_station => station2})
+  end
+
+  it "stores a journey" do
+    subject.top_up(Oystercard::MIN_CHARGE)
+    subject.touch_in(station)
+    subject.touch_out(station2)
+    expect(subject.journeys).to include journey
+  end
   # it 'Checks that the card can be used to Touch_in' do
   #   subject.top_up(10)
   #   subject.touch_in
