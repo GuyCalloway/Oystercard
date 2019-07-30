@@ -1,13 +1,13 @@
 
 class Oystercard
-  CURRENT_BALANCE = 0
+  INITIAL_BALANCE = 0
   MAX_BALANCE = 90
+  MIN_BALANCE = 1
 
-  attr_reader :balance
-  attr_reader :max_balance
+  attr_reader :balance, :max_balance
   attr_accessor :in_use
 
-  def initialize(balance = CURRENT_BALANCE)
+  def initialize(balance = INITIAL_BALANCE)
     @balance = balance
     @max = MAX_BALANCE
     @in_use = false
@@ -18,6 +18,7 @@ class Oystercard
   end
 
   def touch_in
+    fail "Insufficient balance" if @balance < MIN_BALANCE
     @in_use = true
   end
 
