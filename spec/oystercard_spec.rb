@@ -11,7 +11,7 @@ describe Oystercard do
   end
 
   it 'Checks that max balance is enforced' do
-    expect{subject.top_up(100)}.to raise_error
+    expect{subject.top_up(100)}.to raise_error 'maximum balance 90 pounds'
   end
 
   it 'Checks that a fare amount can be deducted from the balance on the card' do
@@ -20,24 +20,31 @@ describe Oystercard do
     expect(subject.balance).to eq(5)
   end
 
-  it 'Checks that the card can be used to Touch_in' do
-    subject.top_up(10)
-    subject.touch_in
-    expect(subject.status).to eq("In Journey")
-  end
+#   In order to get through the barriers.
+# As a customer
+# I need to touch in and out.
 
-  it 'Checks that the card can be used to Touch_out' do
-    subject.top_up(10)
-    subject.touch_out
-    expect(subject.status).to eq("Not In Journey")
+  it 'checks that cards state is not in_journey' do
+    expect(subject).to_not be_in_journey
   end
-
-  it 'Checks that the card cannot be used to touch in unless the minimum £1 balance has been met' do
-    expect{subject.touch_in}.to raise_error
-  end
-
-  it 'Checks that the balance has the minimum fare deducted after a touch_out' do
-    expect{subject.touch_out}.to change{subject.balance}.by(-1)
-  end
+  # it 'Checks that the card can be used to Touch_in' do
+  #   subject.top_up(10)
+  #   subject.touch_in
+  #   expect(subject.status).to eq("In Journey")
+  # end
+  #
+  # it 'Checks that the card can be used to Touch_out' do
+  #   subject.top_up(10)
+  #   subject.touch_out
+  #   expect(subject.status).to eq("Not In Journey")
+  # end
+  #
+  # it 'Checks that the card cannot be used to touch in unless the minimum £1 balance has been met' do
+  #   expect{subject.touch_in}.to raise_error
+  # end
+  #
+  # it 'Checks that the balance has the minimum fare deducted after a touch_out' do
+  #   expect{subject.touch_out}.to change{subject.balance}.by(-1)
+  # end
 
 end
