@@ -3,9 +3,11 @@ class Oystercard
 
   CURRENT_BALANCE = 0
   MAX_BALANCE = 90
+  STATUS = "New oyster"
 
   attr_reader :balance
   attr_reader :max_balance
+  attr_reader :status
 
   def initialize(balance=CURRENT_BALANCE)
     @balance = balance
