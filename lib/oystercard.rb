@@ -7,12 +7,19 @@ class Oystercard
   attr_reader :balance
   attr_reader :max_balance
 
-  def initialize(balance=CURRENT_BALANCE, max_balance=MAX_BALANCE)
-    @balance = CURRENT_BALANCE
+  def initialize(balance=CURRENT_BALANCE)
+    @balance = balance
+    @max = MAX_BALANCE
   end
 
+
   def top_up(amount)
-    @balance += amount
+    if (@balance + amount < MAX_BALANCE)
+       @balance += amount
+    else
+      fail 'maximum balance 90 pounds'
+    end
   end
+
 
 end
